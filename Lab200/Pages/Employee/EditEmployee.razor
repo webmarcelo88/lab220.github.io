@@ -1,0 +1,41 @@
+﻿@page "/Employees/{employeeId:int}/Edit"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using System.ComponentModel.DataAnnotations;
+@using Lab200.Components.Employees
+@using Lab200.Components.Items
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Funcionários</MudText>
+
+    <MudCard Class="mx-5">
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Editar Funcionário</MudText>
+            <MudDivider Light Class="mt-2 mb-n2" />
+        </MudCardHeader>
+        <MudCardContent>
+
+            @if (IsLoading)
+            {
+                <MudPaper Class="d-flex align-content-center justify-center align-start pa-3 mt-4 mb-4" Elevation="0">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudPaper>
+            }
+
+            @if (Employee.Id != 0 && !IsLoading)
+            {
+                <EmployeeForm Employee="Employee"
+                              OnSectorIdChange="HandleSectorIdChange"
+                              OnValidSubmitAsync="HandleSaveButtonClick" />
+            }
+            @if (Items != null && !IsLoading)
+            {
+                <ItemsTable Items="Items" />
+            }
+
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

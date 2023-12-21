@@ -1,0 +1,295 @@
+﻿@if (Categories == null || !Categories.Any())
+{
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <Mudtext Typo="Typo.h1">
+                É necessário cadastrar uma categoria primeiro!
+            </Mudtext>
+        </MudItem>
+    </MudGrid>
+}
+
+@if (Types == null || !Types.Any())
+{
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <Mudtext Typo="Typo.h1">
+                É necessário cadastrar um tipo primeiro!
+            </Mudtext>
+        </MudItem>
+    </MudGrid>
+}
+
+@if (Plants == null || !Plants.Any())
+{
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <Mudtext Typo="Typo.h1">
+                É necessário cadastrar uma planta primeiro!
+            </Mudtext>
+        </MudItem>
+    </MudGrid>
+}
+
+else
+{
+    <MudForm @ref="form" @bind-IsValid="success" @bind-Errors="@errors">
+        <MudGrid Class="d-flex flex-row justify-space-between mb-6">
+            <MudItem xs="12" sm="12" md="6" lg="4">
+                <MudPaper Elevation="0" class="px-4 pb-6">
+                    <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Default}")" Class="mb-5">Identificação</MudText>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" Label="Código" @bind-Value="Product.Code" Required="true"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" RequiredError="Código é obrigatório!" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudSelect Required Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Categoria"
+                                       RequiredError="Categoria é obrigatória!" Placeholder="Selecione uma categoria" @bind-Value="category" SelectedValuesChanged="@SetCategory">
+                                @foreach (var item in Categories!)
+                                {
+                                    <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudSelect Required Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Planta"
+                                       Placeholder="Selecione uma planta" @bind-Value="plant" SelectedValuesChanged="@SetPlant">
+                                @foreach (var item in Plants!)
+                                {
+                                    <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudSelect Required Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tipo"
+                                       Placeholder="Selecione um tipo" @bind-Value="type" SelectedValuesChanged="@SetType">
+                                @foreach (var item in Types!)
+                                {
+                                    <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField T="string" Label="Nome" @bind-Value="Product.Name" Required="true"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" RequiredError="Nome é obrigatório!" />
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="4">
+                <MudPaper Elevation="0" class="px-4 pb-6">
+                    <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Default}")" Class="mb-5">Informações</MudText>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" Label="Descrição" @bind-Value="Product.Description" Required="true" AutoGrow Lines="4" MaxLines="7"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" RequiredError="Descrição é obrigatório!" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField T="string" Label="Especificações" @bind-Value="Product.Specification" AutoGrow Lines="4" MaxLines="6"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="4">
+                <MudPaper Elevation="0" class="px-4 pb-6">
+                    <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Default}")" Class="mb-5">Outros</MudText>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" Label="Unidade Medida" @bind-Value="Product.UnitOfMeasurement"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField T="string" Label="CA" @bind-Value="Product.Ca"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudNumericField T="int?" Label="Validade (em dias)" @bind-Value="Product.ValidityDays" Culture="@_br"
+                                             Min="0" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudNumericField T="int?" Label="Quantidade Mínima" @bind-Value="Product.MinimumQuantity"
+                                             Min="0" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+        <MudDivider Light DividerType="DividerType.Middle" Class="my-6" />
+        <MudGrid Class="d-flex flex-row flex-grow-1 justify-space-between mb-6 mt-6">
+            <MudItem xs="12">
+                <MudPaper Elevation="0" class="px-4 pb-6">
+                    <div class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+                        <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Default}")">Grade</MudText>
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Success" OnClick="AddNewGrid">Adicionar</MudButton>
+                    </div>
+                    <MudDataGrid T="Grid" Items="@Grids" ReadOnly="false" EditMode="@DataGridEditMode.Cell" Bordered="true" Dense="true"
+                                 EditTrigger=DataGridEditTrigger.OnRowClick Class="mt-6 mud-table-header" RowsPerPage="5">
+                        <Columns>
+                            <PropertyColumn Property="x=>x.Sku" />
+                            <PropertyColumn Property="x=>x.Plu" />
+                            <PropertyColumn Property="x=>x.Ean" />
+                            <PropertyColumn Property="x => x.ScaleId">
+                                <EditTemplate>
+                                    <MudSelect @bind-Value="context.Item!.ScaleId" Required Variant="Variant.Outlined" Margin="@Margin.Dense">
+                                        @foreach (var scale in Scales)
+                                        {
+                                            <MudSelectItem Value="@scale.Id">@scale.Name</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </EditTemplate>
+                            </PropertyColumn>
+                            <PropertyColumn Property="x => x.ColorsId">
+                                <EditTemplate>
+                                    <MudSelect @bind-Value="context.Item!.ColorsId" Required Variant="Variant.Outlined" Margin="@Margin.Dense">
+                                        @foreach (var colour in Colours)
+                                        {
+                                            <MudSelectItem Value="@colour.Id">@colour.Name</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </EditTemplate>
+                            </PropertyColumn>
+                            <PropertyColumn Property="x=>x.Price" />
+                            <TemplateColumn>
+                                <EditTemplate>
+                                    <MudFab Class="ml-2" Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" OnClick="@(() => HandleDeleteButtonClick(@context.Item!.Sku, @context.Item!.Ean!))" />
+                                </EditTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                        <PagerContent>
+                            <MudDataGridPager T="Entities.Grid" PageSizeOptions=@(new int[] {5, 10, 15, 20, 25}) />
+                        </PagerContent>
+                    </MudDataGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+        <MudDivider Light DividerType="DividerType.Middle" Class="my-6" />
+        <MudGrid Class="d-flex flex-row flex-grow-1 mb-6 mt-6">
+            <MudItem xs="12">
+                <MudPaper Elevation="0" class="px-4 pb-6">
+                    <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Default}")">Imagens (Atenção: JPG e PNG apenas)</MudText>
+
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="3">
+                @if (!string.IsNullOrWhiteSpace(Product.FifthImage))
+                {
+                    <MudImage Class=" rounded-lg mx-2" Src="@mainImageData" Width="200" Height="150" Alt="Swedish Farm House"
+                              Elevation="1" />
+                }
+                <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="mainPicture"
+                               OnFilesChanged="@((InputFileChangeEventArgs args) => OnPictureSelectionAsync(args, "mainImage"))">
+                    <ButtonTemplate>
+                        <MudTooltip Text="@(mainPicture!=null?mainPicture.Name:string.Empty)" Class="mud-elevation-0">
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                Imagem Chamada
+                            </MudButton>
+                        </MudTooltip>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+            <MudItem xs="3">
+                @if (!string.IsNullOrWhiteSpace(Product.FirstImage))
+                {
+                    <MudImage Class=" rounded-lg mx-2" Src="@image1Data" Width="200" Height="150" Alt="Swedish Farm House"
+                              Elevation="1" />
+                }
+                <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="picture1"
+                               OnFilesChanged="@((InputFileChangeEventArgs args) => OnPictureSelectionAsync(args, "image1"))">
+                    <ButtonTemplate>
+                        <MudTooltip Text="@(picture1!=null?picture1.Name:string.Empty)" Class="mud-elevation-0">
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                Imagem 01
+                            </MudButton>
+                        </MudTooltip>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+            <MudItem xs="3">
+                @if (!string.IsNullOrWhiteSpace(Product.SecondImage))
+                {
+                    <MudImage Class=" rounded-lg mx-2" Src="@image2Data" Width="200" Height="150" Alt="Swedish Farm House"
+                              Elevation="1" />
+                }
+                <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="picture2"
+                               OnFilesChanged="@((InputFileChangeEventArgs args) => OnPictureSelectionAsync(args, "image2"))">
+                    <ButtonTemplate>
+                        <MudTooltip Text="@(picture2!=null?picture2.Name:string.Empty)" Class="mud-elevation-0">
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                Imagem 02
+                            </MudButton>
+                        </MudTooltip>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+            <MudItem xs="3">
+                @if (!string.IsNullOrWhiteSpace(Product.ThirdImage))
+                {
+                    <MudImage Class=" rounded-lg mx-2" Src="@image3Data" Width="200" Height="150" Alt="Swedish Farm House"
+                              Elevation="1" />
+                }
+                <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="picture3"
+                               OnFilesChanged="@((InputFileChangeEventArgs args) => OnPictureSelectionAsync(args, "image3"))">
+                    <ButtonTemplate>
+                        <MudTooltip Text="@(picture3!=null?picture3.Name:string.Empty)" Class="mud-elevation-0">
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                Imagem 03
+                            </MudButton>
+                        </MudTooltip>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+            <MudItem xs="3">
+                @if (!string.IsNullOrWhiteSpace(Product.FourthImage))
+                {
+                    <MudImage Class=" rounded-lg mx-2" Src="@image4Data" Width="200" Height="150" Alt="Swedish Farm House"
+                              Elevation="1" />
+                }
+                <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="picture4"
+                               OnFilesChanged="@((InputFileChangeEventArgs args) => OnPictureSelectionAsync(args, "image4"))">
+                    <ButtonTemplate>
+                        <MudTooltip Text="@(picture4!=null?picture4.Name:string.Empty)" Class="mud-elevation-0">
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                Imagem 04
+                            </MudButton>
+                        </MudTooltip>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+            <MudItem xs="3">
+                @if (!string.IsNullOrWhiteSpace(Product.ImageDetail))
+                {
+                    <MudImage Class=" rounded-lg mx-2" Src="@detailImageData" Width="200" Height="150" Alt="Swedish Farm House"
+                              Elevation="1" />
+                }
+                <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="detailPicture"
+                               OnFilesChanged="@((InputFileChangeEventArgs args) => OnPictureSelectionAsync(args, "detailImage"))">
+                    <ButtonTemplate>
+                        <MudTooltip Text="@(detailPicture!=null?detailPicture.Name:string.Empty)" Class="mud-elevation-0">
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                Imagem Detalhes
+                            </MudButton>
+                        </MudTooltip>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+            <MudGrid>
+                <div class="mt-4 d-flex justify-end flex-grow-1  gap-2">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" DisableElevation="true"
+                               OnClick="@(()=>_navigationManager.NavigateTo(Routes.PRODUCTS))" Class="mx-2">
+                        Voltar
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true"
+                               OnClick="@(async ()=> await SaveAsync())" Disabled="_isProcessing">Salvar</MudButton>
+                </div>
+            </MudGrid>
+        </MudGrid>
+    </MudForm>
+}

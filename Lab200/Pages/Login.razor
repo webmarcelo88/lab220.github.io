@@ -1,0 +1,51 @@
+﻿@layout LoginPageLayout
+@page "/login"
+
+
+<MudPaper Class="d-flex flex-wrap align-content-center justify-center my-7 py-7 rounded-xl" Elevation="3" MinHeight="300px" MaxHeight="500px" MaxWidth="500px">
+    <div class="d-flex flex-wrap align-content-center justify-center pt-5 mb-10" style="flex: 1 100%;">
+        <MudImage Class=" rounded-lg" Src="\images\logos\lab220color.png" Width="233" Height="58" Alt="Swedish Farm House"
+                  Elevation="0" />
+    </div>
+    <div>
+        @if (_isLoading)
+        {
+            <MudPaper Class="d-flex align-content-center justify-center align-start pa-3 mt-4 mb-4" Elevation="0">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+            </MudPaper>
+        }
+        else
+        {
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" Class="d-flex flex-wrap mb-12">
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudTextField T="string" Label="Email" @bind-Value="email" Required="true" Variant="Variant.Outlined"
+                                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Mail" AdornmentColor="Color.Error"
+                                      RequiredError="Nome é obrigatório!" Class="px-10" />
+                    </MudItem>
+                    <MudItem xs="12">
+
+                        <MudTextField T="string" Label="Senha" @bind-Value="password" Required="true" InputType="InputType.Password" Variant="Variant.Outlined"
+                                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" AdornmentColor="Color.Error"
+                                      RequiredError="Senha é obrigatório!" Class="px-10" />
+                    </MudItem>
+                    <MudItem xs="12" Class="pt-8 d-flex justify-end px-13">
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" DisableElevation="true"
+                                   OnClick="HandleLoginButtonClick" Style="width:12rem;">
+                            Login
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+
+            </MudForm>
+        }
+    </div>
+    @*    <div class="mt-4 d-flex justify-end flex-grow-1  gap-2">
+    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" DisableElevation="true"
+    OnClick="@(()=>_navigationManager.NavigateTo(Routes.COMPANY_WEB_USER))" Class="mx-2">
+    Voltar
+    </MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true"
+    OnClick="@(async ()=> await SaveAsync())" Disabled="_isProcessing">Salvar</MudButton>
+    </div>*@
+</MudPaper>

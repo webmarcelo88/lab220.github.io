@@ -1,0 +1,29 @@
+﻿@using Lab200.Interfaces;
+@inherits ComponentBase
+
+@inject ISessionState _sessionState;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+@code {
+    private bool isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity.IsAuthenticated;
+
+        SessionState_StateHasChanged();
+
+        if (!isAuthenticated)
+        {
+            // Redirect to the login page
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    private void SessionState_StateHasChanged()
+    {
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,30 @@
+@page "/company/vm-users/{vmUserId:int}/edit"
+@attribute [Authorize]
+@inherits BaseAuthComponent;
+@using Lab200.Components.Company.VmUser.Loadings
+@using Lab200.Components.Company.VmUser
+
+<AuthorizeView Roles="Master">
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Usuários Vm</MudText>
+
+    <MudCard Class="mx-5">
+
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Editar Usuário Web</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (_isProcessing)
+            {
+                <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+            }
+            @if (_isLoading)
+            {
+                <VmUserFormLoading />
+            }
+            else
+            {
+                <VmUserForm VmUser="VmUser" OnValidSubmitAsync="HandleSaveButtonClick" IsParentLoading="_isLoading" />
+            }
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

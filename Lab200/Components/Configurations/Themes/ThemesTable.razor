@@ -1,0 +1,46 @@
+﻿
+<MudTable T="Theme" Hover Items="@Themes" FixedHeader="@HasFixedHeader" FixedFooter="@HasFixedFooter" Height="@(HasFixedHeader || HasFixedFooter ?"36rem":"")" Dense=true Loading="@IsTableLoading" HeaderClass="mud-table-header">
+    <HeaderContent>
+        @foreach (var item in themesTableHeadings)
+        {
+            <MudTh>@item</MudTh>
+        }
+        @if (OnEditButtonClick.HasDelegate || OnDeleteButtonClick.HasDelegate)
+        {
+            <MudTh />
+        }
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Image">
+            @if (!string.IsNullOrWhiteSpace(context.Image))
+            {
+                <MudImage Src="@($"images/temas/{context.Image}")" Alt="@context.Name" Class="rounded-lg" Width="80" Height="@(context.Layout!.Value == 1 ? 60 : 120)" />
+            }
+            else
+            {
+                <MudPaper Elevation="0" Width="80px" Height="70px" Class="mud-grey" Style="@($"background:{Colors.BlueGrey.Lighten4};")" />
+            }
+        </MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Order">@Data.Orientations[context.Layout!.Value]</MudTd>
+        @if (OnEditButtonClick.HasDelegate || OnDeleteButtonClick.HasDelegate)
+        {
+            <MudTd DataLabel="">
+                @if (OnEditButtonClick.HasDelegate)
+                {
+                    <MudFab Class="ml-2" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                            IconSize="Size.Small" OnClick="@(() => HandleEditButtonClick(@context.Id))" />
+                }
+                @if (OnDeleteButtonClick.HasDelegate)
+                {
+                    <MudFab Class="ml-2" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                            IconSize="Size.Small" OnClick="@(() => HandleDeleteButtonClick(@context.Id))" />
+                }
+            </MudTd>
+        }
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[]{10,50, 100}" RowsPerPageString="Itens por página:" />
+    </PagerContent>
+</MudTable>

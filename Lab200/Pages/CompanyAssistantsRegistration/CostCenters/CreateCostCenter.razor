@@ -1,0 +1,26 @@
+﻿@page "/company-assistants/cost-center/create"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.CompanyAssistantsRegistration.CostCenterComponents;
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Centros de Custo</MudText>
+
+
+    <MudCard Class="mx-5">
+
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4 pb-0">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Novo Centro de Custo</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (_isProcessing)
+            {
+                <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+            }
+            <CostCenterForm CostCenter="CostCenter" OnValidSubmitAsync="HandleSaveButtonClick" />
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

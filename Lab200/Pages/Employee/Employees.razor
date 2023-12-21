@@ -1,0 +1,60 @@
+﻿@page "/employees"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.Employees
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Funcionários</MudText>
+
+    <MudCard Class="mx-5">
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Lista de Funcionários</MudText>
+            @*<MudSpacer />
+            <MudTextField @bind-Value="Search" Placeholder="Buscar funcionário" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudSpacer />*@
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Disabled="@(IsTableLoading)" OnClick="AddNewEmployee">Adicionar Funcionário</MudButton>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (!EmployeesList.Any() && IsTableLoading)
+            {
+                <MudPaper Class="d-flex align-content-center justify-center align-start pa-3 mt-4 mb-4" Elevation="0">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudPaper>
+            }
+            @*@if (EmployeesList != null && !EmployeesList.Any() && !IsTableLoading)
+            {
+            <MudPaper Class="d-flex align-content-center justify-center align-start pa-3 mt-4 mb-4" Elevation="0">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Nenhum funcionário cadastrado</MudText>
+            </MudPaper>
+            }*@
+            else
+            {
+                <EmployeeTable IsTableLoading="IsTableLoading"
+                               HasFixedFooter="false"
+                               HasFixedHeader="true"
+                               EmployeesList="EmployeesList"
+                               OnEditButtonClick="EditEmployee"
+                               OnDeleteButtonClick="DeleteEmployee" />
+            }
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>
+
+<style>
+    .blur {
+        backdrop-filter: blur(10px);
+    }
+
+    .mud-table-header {
+        background-color: #1A7BB6 !important;
+    }
+
+        .mud-table-header .mud-table-cell {
+            color: white !important;
+            background-color: #1A7BB6 !important;
+            font-weight: bolder !important;
+        }
+</style>

@@ -1,0 +1,27 @@
+﻿@inherits BaseAuthComponent
+@attribute [Authorize]
+<MudNavMenu Color="Color.Primary" Class="pa-2" Bordered="true">
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    <AuthorizeView Roles="Master">
+        <MudNavLink Href="@Routes.ALL_EMPLOYEES" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PeopleAlt">Funcionários</MudNavLink>
+        <MudNavGroup Title="Empresa" Icon="@Icons.Material.Filled.Domain">
+            <MudNavLink Href="@Routes.COMPANY_WEB_USER" Match="NavLinkMatch.All">Lista de Usuários Web</MudNavLink>
+            <MudNavLink Href="@Routes.COMPANY_VM_USER" Match="NavLinkMatch.All">Lista de Usuários VM</MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup Title="Cad. Auxiliares de Produtos" Icon="@Icons.Material.Filled.FormatListBulleted">
+            <MudNavLink Href="@Routes.CATEGORIES" Match="NavLinkMatch.All">Categorias</MudNavLink>
+            <MudNavLink Href="@Routes.COLOURS" Match="NavLinkMatch.All">Cores</MudNavLink>
+            <MudNavLink Href="@Routes.SCALES" Match="NavLinkMatch.All">Tamanhos</MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup Title="Cad. Auxiliares da Empresa" Icon="@Icons.Material.Filled.FormatListBulleted">
+            <MudNavLink Href="@Routes.COST_CENTERS" Match="NavLinkMatch.All">Centros de Custo</MudNavLink>
+            <MudNavLink Href="@Routes.FUNCTIONS" Match="NavLinkMatch.All">Funções</MudNavLink>
+            <MudNavLink Href="@Routes.PLANTS" Match="NavLinkMatch.All">Plantas</MudNavLink>
+            <MudNavLink Href="@Routes.SECTORS" Match="NavLinkMatch.All">Setores</MudNavLink>
+        </MudNavGroup>
+        <MudNavLink Href="@Routes.PRODUCTS" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ShoppingBasket">Produtos</MudNavLink>
+        <MudNavGroup Title="Configurações" Icon="@Icons.Material.Filled.Settings">
+            <MudNavLink Href="@Routes.THEMES" Match="NavLinkMatch.All">Temas</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+</MudNavMenu>

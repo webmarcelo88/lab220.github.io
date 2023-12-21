@@ -1,0 +1,24 @@
+﻿@page "/employees/create"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.Employees
+@using Lab200.Components.Items
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Funcionários</MudText>
+
+    <MudCard Class="mx-5">
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Novo Funcionário</MudText>
+            <MudDivider Light Class="mt-2 mb-n2" />
+        </MudCardHeader>
+        <MudCardContent>
+            <EmployeeForm Employee="NewEmployee" OnSectorIdChange="HandleSectorIdChange" OnValidSubmitAsync="HandleSaveButtonClick" />
+            <ItemsTable Items="Items" />
+        </MudCardContent>
+    </MudCard>
+
+</AuthorizeView>

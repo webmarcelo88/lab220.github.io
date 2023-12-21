@@ -1,0 +1,49 @@
+﻿<MudTable T="User" Hover Items="@Users"
+          FixedHeader="@HasFixedHeader" FixedFooter="@HasFixedFooter" Height="@(HasFixedHeader || HasFixedFooter ?"36rem":"")"
+          Dense=true Loading="@IsTableLoading" HeaderClass="mud-table-header">
+    <HeaderContent>
+        @foreach (var item in Headings)
+        {
+            <MudTh>@item</MudTh>
+        }
+        @if (OnEditButtonClick.HasDelegate || OnDeleteButtonClick.HasDelegate)
+        {
+            <MudTh />
+        }
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Perfil">@context.Role</MudTd>
+        <MudTd DataLabel="Ativo">
+
+            @if (context.IsActive.HasValue && !context.IsActive.Value)
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" />
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
+            }
+
+        </MudTd>
+        <MudTd DataLabel="Ultimo Login">@context.LastLogin?.ToString("dd/MM/yyyy HH:mm")</MudTd>
+        @if (OnEditButtonClick.HasDelegate || OnDeleteButtonClick.HasDelegate)
+        {
+            <MudTd DataLabel="">
+                @if (OnEditButtonClick.HasDelegate)
+                {
+                    <MudFab Class="ml-2" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" @onclick="@(() => HandleEditButtonClick(@context.Id))" />
+                }
+                @if (OnDeleteButtonClick.HasDelegate)
+                {
+                    <MudFab Class="ml-2" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" OnClick="@(() => HandleDeleteButtonClick(@context.Id))" />
+                }
+            </MudTd>
+        }
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[]{10,50, 100}" RowsPerPageString="Itens por página:" />
+    </PagerContent>
+</MudTable>

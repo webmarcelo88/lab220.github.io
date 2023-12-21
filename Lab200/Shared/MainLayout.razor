@@ -1,0 +1,86 @@
+﻿@using Lab200.Interfaces;
+@inherits LayoutComponentBase
+@inject ISessionState _sessionState;
+
+<MudThemeProvider Theme="MyCustomTheme"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout Class="d-flex">
+    <MudAppBar Elevation="2">
+        
+        <MudIconButton Edge="Edge.Start" Color ="Color.Inherit">
+            @if (_drawerOpen)
+            {
+                <MudImage Src="@($"images/logos/logo-lab220branco.png")" Alt="" Class="ml-n5" Height="55" Width="220"/>
+            }
+            else
+            {
+                <MudImage Src="@($"images/logos/logo-icon-branco.png")" Alt="" Class="ml-n3" Height="50" Width="51" />
+            }
+
+        </MudIconButton>
+        <MudIconButton Icon="@(_drawerOpen?Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <AuthorizeView>
+            <MudText>@context.User.Identity.Name.ToUpper()</MudText>
+            <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" Size="Size.Large"ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                <MudMenuItem OnClick="Logout">Logout</MudMenuItem>
+            </MudMenu>
+        </AuthorizeView>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="0" Variant="DrawerVariant.Mini" OpenMiniOnHover="true" ClipMode="clipMode" >
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-6 pt-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code{
+    bool _drawerOpen = true;
+    Breakpoint breakpoint = Breakpoint.Lg;
+    DrawerClipMode clipMode = DrawerClipMode.Always;
+
+    string marginRight = "mr-16";
+
+    MudTheme MyCustomTheme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = "#1A7BB6",
+            Secondary = "#8824ad",
+            Tertiary = "#8BD5DE",
+            AppbarBackground = "#1A7BB6",
+            Background = "#EDEDED",
+            Error = "#D73D28",
+            Warning = "#F7BB13",
+            Success = "#239E62",
+            DrawerBackground = "#F6F6F6",
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = MudBlazor.Colors.Blue.Lighten1
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px",
+            DrawerMiniWidthLeft = "70px",
+        },
+        Typography = new Typography()
+        {
+            Default = new Default()
+            {
+                FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" }
+            }
+        }
+    };
+
+    async Task Logout() => await _sessionState.LogoutAsync();
+
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
+}

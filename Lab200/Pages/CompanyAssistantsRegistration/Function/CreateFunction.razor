@@ -1,0 +1,26 @@
+﻿@page "/company-assistants/functions/create"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.CompanyAssistantsRegistration.FunctionComponents;
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Funções</MudText>
+
+
+    <MudCard Class="mx-5">
+
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4 pb-0">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Nova Função</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (_isProcessing)
+            {
+                <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+            }
+            <FunctionForm Function="Function" CostCenters="CostCenters" OnValidSubmitAsync="HandleSaveButtonClick" />
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

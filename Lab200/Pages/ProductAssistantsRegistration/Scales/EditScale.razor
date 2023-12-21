@@ -1,0 +1,41 @@
+@page "/product-assistants/scales/{scaleId:int}/edit"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.ProductAssistantsRegistration.Scales;
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Tamanhos</MudText>
+
+
+    <MudCard Class="mx-5">
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Editar Tamanho</MudText>
+            <MudDivider Light Class="mt-2 mb-n2" />
+        </MudCardHeader>
+        <MudCardContent>
+
+            @if (_isProcessing)
+            {
+                <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+            }
+
+            @if (IsLoading)
+            {
+                <MudPaper Class="d-flex align-content-center justify-center align-start pa-3 mt-4 mb-4" Elevation="0">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudPaper>
+            }
+
+            @if (Scale != null && Scale!.Id != 0 && !IsLoading)
+            {
+                <ScalesForm Scale="Scale"
+                            IsParentLoading="_isProcessing"
+                            OnValidSubmitAsync="HandleSaveButtonClick" />
+            }
+
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

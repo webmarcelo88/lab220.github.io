@@ -1,0 +1,189 @@
+﻿@using System.ComponentModel.DataAnnotations;
+<MudForm Model="@Employee" Class="px-4 mb-2 nt-n4">
+    <MudGrid Class="d-flex flex-row justify-space-between mb-6">
+        <MudItem xs="12">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Clearable @bind-Value="Employee.Name" Label="Nome" Required RequiredError="Obrigatório" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Clearable @bind-Value="Employee.Registration" Label="Matricula" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="Employee.Biometry" Label="Biometria Token" Disabled Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudDatePicker Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Date="Employee.AdmissionDate" DisableToolbar DateFormat="dd/MM/yyyy" Label="Data Admissão" Class="d-flex mud-width-full" Editable />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Clearable @bind-Value="Employee.RG" Label="RG" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Clearable @bind-Value="Employee.CPF" Label="CPF" Required RequiredError="Obrigatório" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Clearable @bind-Value="Employee.CTPS" Label="CTPS" Class="d-flex mud-width-full" />
+        </MudItem>
+
+        @if (costCenters != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect Required RequiredError="Obrigatório" Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable T="string"
+                          Dense Label="Centro de Custo"
+                          Placeholder="Selecione o centro de custo"
+                          @bind-Value = "costCenter"
+                          SelectedValuesChanged="@(async (values) => await GetFunctionsAndSectorsAsync(values))">
+                    @foreach (var item in costCenters)
+                    {
+                        <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        }
+
+        @if (plants == null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect Required RequiredError="Obrigatório" Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable @bind-Value="plantIdentifier" Label="Planta"
+                           Placeholder="Selecione a planta" Class="d-flex mud-width-full">
+                </MudSelect>
+            </MudItem>
+        }
+        @if (plants != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect Required RequiredError="Obrigatório" Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable @bind-Value="plantIdentifier" Label="Planta"
+                           Placeholder="Selecione a planta" Class="d-flex mud-width-full">
+                    @foreach (var item in plants)
+                    {
+                        <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        }
+
+        @if (sectors == null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect Required RequiredError="Obrigatório" Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable Label="Setor" @bind-Value="sectorIdentifier"
+                           Placeholder="Selecione o setor" Class="d-flex mud-width-full" Disabled="@(string.IsNullOrWhiteSpace(costCenter))">
+                </MudSelect>
+            </MudItem>
+        }
+        @if (sectors != null && !string.IsNullOrWhiteSpace(costCenter))
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect T="string" Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable Label="Setor"
+                          Required RequiredError="Obrigatório" Class="d-flex mud-width-full"
+                           Placeholder="Selecione o setor" ValueChanged="@(async (string value) => await GetSectorItemsAsync(value))">
+                    @foreach (var item in sectors)
+                    {
+                        <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        }
+        @if (functions == null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable @bind-Value="functionIdentifier" Label="Função"
+                          Required RequiredError="Obrigatório" Placeholder="Selecione a função"
+                           Class="d-flex mud-width-full" Disabled="@(string.IsNullOrWhiteSpace(costCenter))">
+                </MudSelect>
+            </MudItem>
+        }
+        @if (functions != null && !string.IsNullOrWhiteSpace(costCenter))
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect T="string" Variant="Variant.Outlined" Margin="Margin.Dense"
+                          Clearable @bind-Value="functionIdentifier" Label="Função"
+                          Required RequiredError="Obrigatório" Placeholder="Selecione a função"
+                           Class="d-flex mud-width-full">
+                    @foreach (var item in functions)
+                    {
+                        <MudSelectItem Value="@item.Id.ToString()">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        }
+
+        <MudItem xs="6" sm="3" md="2">
+            <MudTimePicker Editable Mask="@(new PatternMask("00:00"))" Variant="Variant.Outlined" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" @bind-Time="Employee.StartTime" Label="Hora Inicial" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="6" sm="3" md="2">
+            <MudTimePicker Editable Mask="@(new PatternMask("00:00"))" Variant="Variant.Outlined" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" @bind-Time="Employee.EndTime" Label="Hora Final" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="6" sm="3" md="2">
+            <MudNumericField Variant="Variant.Outlined" T="int?" Margin="Margin.Dense" Clearable @bind-Value="Employee.Order" Label="Ordem" Required RequiredError="Obrigatório" Class="d-flex mud-width-full" />
+        </MudItem>
+        <MudItem xs="6" sm="3" md="2">
+            <MudSelect Required Variant="Variant.Outlined" Margin="Margin.Dense"
+                       Clearable
+                       Dense Label="Status" @bind-Value="Employee.Status">
+                <MudSelectItem Value="@("Ativo")">Ativo</MudSelectItem>
+                <MudSelectItem Value="@("Inativo")">Inativo</MudSelectItem>
+                <MudSelectItem Value="@("Suspenso")">Suspenso</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField Variant="Variant.Outlined" T="string" Margin="Margin.Dense" Clearable @bind-Value="Employee.Email" Label="Email" Class="d-flex mud-width-full" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+        </MudItem>
+        <MudItem xs="8" sm="6" md="4" Class="d-xs-flex d-sm-flex d-md-flex flex-wrap">
+            <MudField Label="Permissões Dias" Variant=Variant.Outlined InnerPadding="false">
+                <div class="d-xs-flex d-sm-flex d-md-flex flex-wrap">
+                    <MudCheckBox @bind-Checked="@Employee.Monday" Label="Segunda" />
+                    <MudCheckBox @bind-Checked="@Employee.Tuesday" Label="Terça" />
+                    <MudCheckBox @bind-Checked="@Employee.Wednesday" Label="Quarta" />
+                    <MudCheckBox @bind-Checked="@Employee.Thursday" Label="Quinta" />
+                    <MudCheckBox @bind-Checked="@Employee.Friday" Label="Sexta" />
+                    <MudCheckBox @bind-Checked="@Employee.Saturday" Label="Sabado" />
+                    <MudCheckBox @bind-Checked="@Employee.Sunday" Label="Domingo" />
+                </div>
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="8" Class="d-flex align-center">
+            @if (!string.IsNullOrWhiteSpace(imageData))
+            {
+                <MudTooltip Text="@(picture!=null?picture.Name:string.Empty)" Class="mud-tooltip">
+                    <MudImage Class=" rounded-lg mx-2" Src="@imageData" Width="180" Height="230" Alt="" Elevation="1" />
+                </MudTooltip>
+            }
+            <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="picture" OnFilesChanged="OnPictureSelectionAsync">
+                <ButtonTemplate>
+                    <MudTooltip Text="@(picture!=null?picture.Name:string.Empty)" Class="mud-elevation-0">
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.Image"
+                                   Class="mud-tooltip my-2 mud-elevation-0"
+                                   for="@context">
+                            Foto
+                        </MudButton>
+                    </MudTooltip>
+                </ButtonTemplate>
+            </MudFileUpload>
+        </MudItem>
+        <MudDivider />
+    </MudGrid>
+    <MudPaper Elevation="0" Class="d-flex justify-end flex-grow-1 gap-4 my-6">
+        <MudButton Href="/employees" Variant="Variant.Outlined" Color="Color.Secondary">Voltar</MudButton>
+        <MudButton Disabled="@_processing" OnClick="HandleSaveButtonClick"
+                   Variant="Variant.Filled"
+                   Size="Size.Medium" Color="Color.Primary">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Salvando...</MudText>
+            }
+            else
+            {
+                <MudText>Salvar</MudText>
+            }
+
+        </MudButton>
+    </MudPaper>
+</MudForm>

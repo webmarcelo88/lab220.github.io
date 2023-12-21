@@ -1,0 +1,50 @@
+﻿<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="0" class="px-4 pb-6">
+            <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Lighten1}")">Dados do Tema</MudText>
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudTextField T="string" Label="Nome do Tema" @bind-Value="Theme.Name" Required="true" Class="mb-6"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense" RequiredError="Nome é obrigatório!" />
+                        <MudTextField T="string" Label="Description" @bind-Value="Theme.Description" AutoGrow Lines="4" MaxLines="6" Class="mb-6" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        <MudSelect Required Variant="Variant.Outlined" Margin="Margin.Dense" T="int?" Label="Layout" @bind-Value="Theme.Layout" Class="mt-6">
+                            @foreach (var orientation in Data.Orientations)
+                            {
+                                <MudSelectItem T="int?" Value="@orientation.Key">@orientation.Value</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="6" sm="6">
+                        @if (!string.IsNullOrWhiteSpace(imageData))
+                        {
+                            <MudTooltip Text="@(picture!=null?picture.Name:string.Empty)" Class="mud-tooltip">
+                                <MudImage Class=" rounded-lg mx-2" Src="@imageData" Width="300" Height="170"
+                                          Elevation="1" />
+                            </MudTooltip>
+                        }
+                        <MudFileUpload Class="d-flex flex-wrap mud-elevation-0" T="IBrowserFile" @bind-Files="picture"
+                                       OnFilesChanged="OnPictureSelectionAsync">
+                            <ButtonTemplate>
+                                <MudTooltip Text="@(picture!=null?picture.Name:string.Empty)" Class="mud-elevation-0">
+                                    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                               StartIcon="@Icons.Material.Filled.Image" Class="mud-tooltip my-2 mud-elevation-0" for="@context">
+                                        Imagem
+                                    </MudButton>
+                                </MudTooltip>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+            <div class="mt-4 d-flex justify-end flex-grow-1  gap-2">
+                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" DisableElevation="true"
+                           OnClick="@(()=>_navigationManager.NavigateTo(Routes.THEMES))" Class="mx-2">
+                    Voltar
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true"
+                           OnClick="@(async ()=> await SaveAsync())" Disabled="_isProcessing">Salvar</MudButton>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

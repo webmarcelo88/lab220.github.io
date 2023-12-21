@@ -1,0 +1,57 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="MyCustomTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout Class="d-flex align-content-center justify-center flex-wrap flex-grow-1"
+           Style="height: 100vh;background: rgb(233,152,0);background: linear-gradient(180deg, rgba(233,152,0,0.85) 0%, rgba(253,45,45,0.97) 100%);">
+    @Body
+</MudLayout>
+
+
+@code {
+    bool _drawerOpen = true;
+    Breakpoint breakpoint = Breakpoint.Lg;
+    DrawerClipMode clipMode = DrawerClipMode.Always;
+
+    string marginRight = "mr-16";
+
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = "#1A7BB6",
+                Secondary = "#8824ad",
+                Tertiary = "#8BD5DE",
+                AppbarBackground = "#1A7BB6",
+                Background = "#EDEDED",
+                Error = "#D73D28",
+                Warning = "#F7BB13",
+                Success = "#239E62",
+                DrawerBackground = "#F6F6F6",
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = MudBlazor.Colors.Blue.Lighten1
+            },
+
+            LayoutProperties = new LayoutProperties()
+            {
+                DrawerWidthLeft = "260px",
+                DrawerWidthRight = "300px",
+                DrawerMiniWidthLeft = "70px",
+            },
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" }
+                }
+            }
+        };
+
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
+}
+
+

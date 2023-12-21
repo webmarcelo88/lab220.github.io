@@ -1,0 +1,52 @@
+﻿@page "/employees-item/create"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+<AuthorizeView Roles="Master">
+
+    <MudCard>
+        <MudCardHeader Class="justify-space-between flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Novo Item do Funcionário</MudText>
+        </MudCardHeader>
+        <MudDivider Light DividerType="DividerType.Middle" />
+        <MudForm Model="@NewEmployeeItem" Class="px-4 mb-2">
+            <MudGrid Class="d-flex flex-row mb-6">
+                @if (ClientGrids != null)
+                {
+                    <MudItem xs="12" sm="12" md="12" Class="mt-6">
+                        <MudSelect Required Variant="Variant.Outlined" Margin="Margin.Dense" Class="mb-4" T="Grid"
+                                  Clearable Label="Produto" Placeholder="Selecione um produto..."
+                                   ValueChanged="@SetNewEmployeeItemInfo">
+                            @foreach (var item in ClientGrids)
+                            {
+                                <MudSelectItem Value="@item">@($"{item.Sku} | {item.Product?.Name} | {item.Scale?.Name} | {item.Colors?.Name}, {item.Sku}")</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                }
+                <MudItem xs="12" sm="6" md="4">
+                    <MudNumericField Variant="Variant.Outlined" Placeholder="Informe a ordem" Margin="Margin.Dense" Clearable @bind-Value="NewEmployeeItem.Order" Label="Ordem" Required Class="d-flex mud-width-full mb-4" />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+                    <MudTextField Variant="Variant.Outlined" Placeholder="Informe a quantidade permitida" Margin="Margin.Dense" Clearable @bind-Value="NewEmployeeItem.Qty" Label="Qtd. Permitida" Required Class="d-flex mud-width-full" />
+                </MudItem>
+            </MudGrid>
+            <MudPaper Elevation="0" Class="d-flex justify-end flex-grow-1 pb-4">
+                <MudButton Disabled="@Processing" OnClick="CreateNewEmployeeItemAsync"
+                           Variant="Variant.Filled"
+                           Size="Size.Medium" Color="Color.Primary">
+                    @if (Processing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Salvando...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Salvar</MudText>
+                    }
+                </MudButton>
+            </MudPaper>
+        </MudForm>
+    </MudCard>
+</AuthorizeView>

@@ -1,0 +1,42 @@
+﻿<MudTable Elevation="1" HeaderClass="mud-table-header" Class="my-1 px-4 rounded" Bordered Outlined Square T="Item" Hover Items="@Items" FixedHeader="@HasFixedHeader" FixedFooter="@HasFixedFooter" Height="@(HasFixedHeader || HasFixedFooter ?"26rem":"")" Dense=true>
+    <ToolBarContent>
+        <MudText Typo="Typo.h6"><b>Itens do Setor</b></MudText>
+        <MudSpacer />
+    </ToolBarContent>
+
+    <HeaderContent>
+        @foreach (var item in itemsTableHeadings)
+        {
+            <MudTh>@item</MudTh>
+        }
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="ID">@context.Id</MudTd>
+        <MudTd DataLabel="Sku">@context.Product.Code</MudTd>
+        <MudTd DataLabel="Produto" >@context.Product.Name</MudTd>
+        <MudTd DataLabel="Tamanho">@context.Size.Name</MudTd>
+        <MudTd DataLabel="Cor">@context.Color.Name</MudTd>
+        <MudTd DataLabel="Categoria">@context.Product.Category.Name</MudTd>
+        <MudTd DataLabel="Ordem">@context.Ordem</MudTd>
+
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[]{10,50, 100}" RowsPerPageString="Itens por página:" />
+    </PagerContent>
+</MudTable>
+
+<style>
+    .blur {
+        backdrop-filter: blur(10px);
+    }
+
+    .mud-table-header {
+        background-color: #1A7BB6 !important;
+    }
+
+    .mud-table-header .mud-table-cell {
+        color: white !important;
+        background-color: #1A7BB6 !important;
+        font-weight: bolder !important;
+    }
+</style>

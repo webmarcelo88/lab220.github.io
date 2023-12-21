@@ -1,0 +1,26 @@
+﻿@page "/company-assistants/plants/create"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.CompanyAssistantsRegistration.PlantComponents
+
+<AuthorizeView Roles="Master">
+
+<MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Plantas</MudText>
+
+
+<MudCard Class="mx-5">
+
+    <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4 pb-0">
+        <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Nova Função</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        @if (_isProcessing)
+        {
+            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+        }
+        <PlantForm Plant="Plant" OnValidSubmitAsync="HandleSaveButtonClick" />
+    </MudCardContent>
+</MudCard>
+</AuthorizeView>

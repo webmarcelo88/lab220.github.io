@@ -1,0 +1,25 @@
+﻿@page "/company-assistants/sectors/create"
+@inherits BaseAuthComponent;
+@using Lab200.Components.CompanyAssistantsRegistration.SectorComponents
+
+@attribute [Authorize]
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Setores</MudText>
+
+
+    <MudCard Class="mx-5">
+
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4 pb-0">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Novo Setor</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (_isProcessing)
+            {
+                <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+            }
+            <SectorForm Sector="Sector" CostCenters="CostCenters" OnValidSubmitAsync="HandleSaveButtonClick" />
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

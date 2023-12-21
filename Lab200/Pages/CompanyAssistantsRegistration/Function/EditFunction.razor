@@ -1,0 +1,34 @@
+﻿@page "/company-assistants/functions/{functionId:int}/edit"
+@inherits BaseAuthComponent;
+
+@attribute [Authorize]
+
+@using Lab200.Components.CompanyAssistantsRegistration.FunctionComponents
+
+<AuthorizeView Roles="Master">
+
+    <MudText Typo="Typo.h4" Class="px-6 mb-6" Style="font-weight: bold;">Funções</MudText>
+
+    <MudCard Class="mx-5">
+
+        <MudCardHeader Class="d-flex justify-space-between align-content-center flex-wrap flex-grow-1 mr-4">
+            <MudText Color="Color.Inherit" Typo="Typo.h6" Style="font-weight: bold;">Editar Funções</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (_isProcessing)
+            {
+                <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Medium" Rounded Value="_progressPercent" />
+            }
+            @if (_isLoading)
+            {
+                <MudPaper Class="d-flex align-content-center justify-center align-start pa-3 mt-4 mb-4" Elevation="0">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudPaper>
+            }
+            else
+            {
+                <FunctionForm Function="Function" CostCenters="CostCenters" OnValidSubmitAsync="HandleSaveButtonClick" IsParentLoading="_isLoading" />
+            }
+        </MudCardContent>
+    </MudCard>
+</AuthorizeView>

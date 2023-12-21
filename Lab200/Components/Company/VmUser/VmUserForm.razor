@@ -1,0 +1,52 @@
+﻿@using Lab200.Components.Company.VmUser.Loadings
+
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        @if (_isLoading && IsParentLoading)
+        {
+            <VmUserFormLoading />
+        }
+        @if (!_isLoading && !IsParentLoading)
+        {
+            <MudPaper Elevation="0" Class="px-4 pb-4">
+                <MudText Typo="Typo.h6" Style="@($"color:{Colors.Grey.Lighten1}")">Dados da Conta</MudText>
+                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudTextField T="string" Label="Nome" @bind-Value="VmUser.Name" Required="true"
+                        RequiredError="Nome é obrigatório!" />
+                    <MudTextField T="string" Label="Login" @bind-Value="VmUser.Login" Required="true"
+                        RequiredError="Nome é obrigatório!" />
+                    <MudGrid>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Label="Senha" @bind-Value="VmUser.Pass"
+                                HelperText="Coloque uma senha forte" @ref="pwField1" InputType="InputType.Password"
+                                Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+                                RequiredError="Senha é obrigatória!" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Label="Confirmar Senha" HelperText="Repita a senha informada"
+                                InputType="InputType.Password" @bind-Value="_confirmPass"
+                                Validation="@(new Func<string, string>(PasswordMatch))" />
+                        </MudItem>
+                    </MudGrid>
+                </MudForm>
+                <div class="mt-4 d-flex justify-end flex-grow-1  gap-2">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" DisableElevation="true"
+                        OnClick="@(()=>_navigationManager.NavigateTo(Routes.COMPANY_WEB_USER))" Class="mx-2">Voltar
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true"
+                        OnClick="@(async ()=> await SaveAsync())" Disabled="_isProcessing">Salvar</MudButton>
+                </div>
+            </MudPaper>
+        }
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full rounded-0 border-l-2 border-solid"
+            Style="@($"border-color:{Colors.Grey.Lighten1}")" Elevation="0">
+            <MudAlert Severity="Severity.Info" Class="mt-2">Os campos com * são obrigatórios</MudAlert>
+            @foreach (var error in errors)
+            {
+                <MudAlert Severity="Severity.Error" Class="mt-2">@error</MudAlert>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
